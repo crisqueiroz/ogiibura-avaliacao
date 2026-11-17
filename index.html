@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oggi Sorvetes · Ibura — Conta pra gente!</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--rosa:#D30083;--rosa-esc:#A80068;--rosa-claro:#FFE9F5;--txt:#3b1a30}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:'Fredoka',system-ui,sans-serif;background:var(--rosa-claro);color:var(--txt)}
+  header{background:#fff;text-align:center;padding:14px 12px 0}
+  header img{width:min(260px,70%);height:auto;display:block;margin:0 auto}
+  header p{margin:10px -12px 0;background:var(--rosa);color:#fff;font-weight:500;letter-spacing:.12em;font-size:14px;text-transform:uppercase;padding:8px}
+  main{max-width:520px;margin:0 auto;padding:20px 16px 40px}
+  h1{font-size:26px;margin:4px 0 4px;color:var(--rosa-esc)}
+  .sub{margin:0 0 18px;opacity:.85}
+  .card{background:#fff;border-radius:18px;padding:16px;margin-bottom:14px;box-shadow:0 2px 8px rgba(168,0,104,.12)}
+  label.q{display:block;font-weight:600;margin-bottom:10px}
+  .opt{font-weight:400;opacity:.6;font-size:13px}
+  .stars{display:flex;gap:6px;justify-content:center}
+  .stars button{background:none;border:0;font-size:40px;cursor:pointer;color:#e4cfdc;line-height:1;padding:0 2px}
+  .stars button.on{color:#F5A623}
+  .faces{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+  .faces button{border:2px solid #eed7e6;background:#fff;border-radius:14px;padding:10px 2px;font-family:inherit;font-size:13px;cursor:pointer}
+  .faces button span{display:block;font-size:30px}
+  .faces.dois{grid-template-columns:repeat(2,1fr)}
+  .priv{font-size:13px;opacity:.7;margin:8px 0 0}
+  input[type=tel]{width:100%;border:2px solid #eed7e6;border-radius:12px;padding:12px;font-family:inherit;font-size:16px}
+  .faces button.on{border-color:var(--rosa);background:var(--rosa-claro)}
+  .nps{display:grid;grid-template-columns:repeat(11,1fr);gap:4px}
+  .nps button{border:2px solid #eed7e6;background:#fff;border-radius:10px;padding:10px 0;font-family:inherit;font-size:15px;cursor:pointer}
+  .nps button.on{background:var(--rosa);border-color:var(--rosa);color:#fff}
+  .legenda{display:flex;justify-content:space-between;font-size:12px;opacity:.7;margin-top:6px}
+  input[type=text],textarea{width:100%;border:2px solid #eed7e6;border-radius:12px;padding:12px;font-family:inherit;font-size:16px}
+  textarea{min-height:90px;resize:vertical}
+  input:focus,textarea:focus,input[type=tel]:focus{outline:none;border-color:var(--rosa)}
+  .enviar{width:100%;background:var(--rosa);color:#fff;border:0;border-radius:999px;padding:16px;font-family:inherit;font-size:19px;font-weight:600;cursor:pointer}
+  .enviar:disabled{opacity:.5}
+  .erro{color:#b00020;text-align:center;min-height:20px;margin:6px 0}
+  #obrigado{display:none;text-align:center}
+  #obrigado .emoji{font-size:60px}
+  #obrigado a.btn{display:inline-block;margin-top:10px;background:var(--rosa);color:#fff;text-decoration:none;padding:14px 22px;border-radius:999px;font-weight:600}
+</style>
+</head>
+<body>
+<header>
+  <img src="logo.png" alt="Oggi Sorvetes">
+  <p>Unidade Ibura</p>
+</header>
+<main>
+ <form id="form">
+  <h1>Conta pra gente! 🍦</h1>
+  <p class="sub">Leva menos de 1 minuto e sua opinião ajuda a gente a melhorar.</p>
+
+  <div class="card"><label class="q">Como foi sua experiência hoje?</label>
+    <div class="stars" id="estrelas"></div></div>
+
+  <div class="card"><label class="q" for="sabor">Qual sabor você provou?</label>
+    <input type="text" id="sabor" placeholder="Ex.: pistache, morango..." maxlength="80"></div>
+
+  <div class="card"><label class="q">Como foi o atendimento?</label>
+    <div class="faces" id="atendimento">
+      <button type="button" data-v="Excelente"><span>😍</span>Excelente</button>
+      <button type="button" data-v="Bom"><span>🙂</span>Bom</button>
+      <button type="button" data-v="Regular"><span>😐</span>Regular</button>
+      <button type="button" data-v="Ruim"><span>🙁</span>Ruim</button>
+    </div></div>
+
+  <div class="card"><label class="q">Qual a chance de você nos indicar a um amigo?</label>
+    <div class="nps" id="nps"></div>
+    <div class="legenda"><span>Nenhuma</span><span>Com certeza!</span></div></div>
+
+  <div class="card"><label class="q" for="sugestao">O que podemos melhorar ou qual sabor você quer ver aqui? <span class="opt">(opcional)</span></label>
+    <textarea id="sugestao" maxlength="500"></textarea></div>
+
+  <div class="card"><label class="q">Podemos entrar em contato com você?</label>
+    <div class="faces dois" id="contatoSN">
+      <button type="button" data-v="Sim"><span>👍</span>Sim</button>
+      <button type="button" data-v="Não"><span>🙅</span>Não</button>
+    </div>
+    <div id="telBox" style="display:none;margin-top:14px">
+      <label class="q" for="telefone">Seu telefone (WhatsApp)</label>
+      <input type="tel" id="telefone" inputmode="tel" autocomplete="tel" maxlength="20" placeholder="(81) 90000-0000">
+      <p class="priv">Usaremos só para falar sobre a sua avaliação. Você pode pedir para não receber mais contato quando quiser.</p>
+    </div></div>
+
+  <input type="text" id="site" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
+
+  <div class="erro" id="erro"></div>
+  <button class="enviar" id="btn" type="submit">Enviar</button>
+ </form>
+
+ <div class="card" id="obrigado">
+  <div class="emoji">💜</div>
+  <h1>Obrigada por adoçar nosso dia!</h1>
+  <div id="mapsBox"><p>Gostou? Conta pra todo mundo:</p>
+  <a class="btn" id="maps" href="#" target="_blank" rel="noopener">⭐ Avaliar no Google</a></div>
+ </div>
+</main>
+
+<script>
+// ===== CONFIGURAÇÃO =====
+var ENDPOINT = "";   // URL do Google Apps Script (planilha). Vazio = modo teste.
+var LINK_MAPS = "#"; // link de avaliação do Google Maps da loja
+document.getElementById('maps').href = LINK_MAPS;
+if(LINK_MAPS==='#'){document.getElementById('mapsBox').style.display='none';}
+
+var nota=0, atend="", nps=null, aceita="";
+var est=document.getElementById('estrelas');
+for(var i=1;i<=5;i++){(function(n){var b=document.createElement('button');b.type='button';b.textContent='★';b.setAttribute('aria-label',n+' estrelas');
+  b.onclick=function(){nota=n;[].forEach.call(est.children,function(x,k){x.classList.toggle('on',k<n)})};est.appendChild(b)})(i)}
+[].forEach.call(document.querySelectorAll('#atendimento button'),function(b){b.onclick=function(){atend=b.dataset.v;
+  [].forEach.call(document.querySelectorAll('#atendimento button'),function(x){x.classList.toggle('on',x===b)})}});
+[].forEach.call(document.querySelectorAll('#contatoSN button'),function(b){b.onclick=function(){aceita=b.dataset.v;
+  [].forEach.call(document.querySelectorAll('#contatoSN button'),function(x){x.classList.toggle('on',x===b)});
+  document.getElementById('telBox').style.display=(aceita==='Sim')?'block':'none'}});
+var np=document.getElementById('nps');
+for(var j=0;j<=10;j++){(function(n){var b=document.createElement('button');b.type='button';b.textContent=n;
+  b.onclick=function(){nps=n;[].forEach.call(np.children,function(x,k){x.classList.toggle('on',k===n)})};np.appendChild(b)})(j)}
+
+document.getElementById('form').onsubmit=function(e){
+  e.preventDefault();
+  var erro=document.getElementById('erro');
+  if(!nota||!atend||nps===null||!aceita||!document.getElementById('sabor').value.trim()){
+    erro.textContent='Responda estrelas, sabor, atendimento, indicação e contato 💜';return;}
+  var tel=document.getElementById('telefone').value.trim();
+  if(aceita==='Sim' && tel.replace(/\D/g,'').length<10){erro.textContent='Coloque um telefone com DDD, por favor 💜';return;}
+  erro.textContent='';
+  var dados={data:new Date().toLocaleString('pt-BR',{timeZone:'America/Recife'}),
+    nota:nota,sabor:document.getElementById('sabor').value.trim(),atendimento:atend,indicacao:nps,
+    sugestao:document.getElementById('sugestao').value.trim(),aceitaContato:aceita,telefone:(aceita==='Sim'?tel:'')};
+  var btn=document.getElementById('btn');btn.disabled=true;btn.textContent='Enviando...';
+  function fim(){document.getElementById('form').style.display='none';document.getElementById('obrigado').style.display='block';window.scrollTo(0,0)}
+  if(document.getElementById('site').value){fim();return;}
+  if(!ENDPOINT){console.log('MODO TESTE',dados);fim();return;}
+  fetch(ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(dados)})
+   .then(fim).catch(function(){btn.disabled=false;btn.textContent='Enviar';erro.textContent='Não deu pra enviar. Tente de novo.'});
+};
+</script>
+</body>
+</html>
